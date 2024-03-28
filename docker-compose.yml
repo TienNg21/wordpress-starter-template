@@ -1,0 +1,27 @@
+version: '3'
+services: 
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - .:/var/www/html
+
+  db:
+    image: mysql:latest
+    cap_add:
+      - SYS_NICE
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      # - ./init-db:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+      - .mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: "wordpress"
+      MYSQL_ROOT_PASSWORD: "wordpress"
+
+volumes:
+  db_data:
